@@ -1,0 +1,188 @@
+:root {
+  --row-tint: 0.15;
+  --row-hover: 0.22;
+  --dim: 0.6;
+}
+
+/* pure black theme */
+html:root {
+  --color-surface-main: #000 !important;
+  --color-surface-main-transparent: #000 !important;
+  --color-surface-overlay: #0b0b0b !important;
+  --color-popover: #000 !important;
+  --color-input-bg: #000 !important;
+  --color-input-border: #2a2a2a !important;
+  --color-borders: #2a2a2a !important;
+  --color-highlight: #242424 !important;
+  --color-secondary: #2a2a2a !important;
+  --color-secondary-hover: #383838 !important;
+}
+body { background: #000 !important; }
+
+/* clutter */
+header h1,
+app-monitor-qr,
+header button[apptrackingevent="toggle-fullscreen"],
+aside > div > div:has(> img[src*="logo"]),
+aside li:has(> a[href="/changelogs"]),
+aside div:has(> button[popovertarget]),
+app-status-bar footer > app-status-bar-item:nth-child(2),
+app-status-bar-item:has(.text-success) {
+  display: none !important;
+}
+
+header > div { padding: 4px 8px !important; }
+
+/* collapsed sidebar = gone */
+aside:not(.w-70) {
+  width: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  overflow: hidden !important;
+}
+
+app-status-bar {
+  opacity: 0;
+  transition: opacity .15s;
+}
+app-status-bar:hover,
+app-status-bar:has(.text-error) {
+  opacity: 1;
+}
+
+html.fit st-scrollable-content { overflow-y: hidden !important; }
+
+app-match-view .gap-4 { gap: 8px !important; }
+
+
+/* ---- team averages ---- */
+
+[app-match-team] { padding: 4px 34px 4px 16px !important; }
+
+/* one row, lined up with the player table columns */
+@container team (min-width: 32rem) {
+  [app-match-team] > div {
+    display: grid !important;
+    grid-template-columns: repeat(7, 1fr);
+    column-gap: 4px;
+    row-gap: 0 !important;
+    align-items: center;
+  }
+  [app-match-team] h3 {
+    grid-column: 1 / 4;
+    grid-row: 1 / 3;
+    font-weight: 600;
+  }
+  [app-match-team] > div::before,
+  [app-match-team] > div::after {
+    grid-column: 4;
+    text-align: right;
+    padding-right: 8px;
+    font-size: .8em;
+    color: var(--color-text-secondary);
+  }
+  [app-match-team] > div::before { content: "acc"; grid-row: 1; opacity: var(--dim); }
+  [app-match-team] > div::after { content: "ship"; grid-row: 2; }
+
+  [app-match-team] .grid { display: contents !important; }
+  [app-match-team] .grid > span,
+  [app-match-team] [app-match-team-average] .text-text-secondary { display: none !important; }
+
+  [app-match-team] [app-match-team-average] > div {
+    justify-content: center;
+    font-weight: 500;
+  }
+  [app-match-team] .grid:nth-of-type(2) > div { grid-row: 1; opacity: var(--dim); }
+  [app-match-team] .grid:nth-of-type(3) > div { grid-row: 2; }
+  [app-match-team] .grid > div:nth-of-type(1) { grid-column: 5; }
+  [app-match-team] .grid > div:nth-of-type(2) { grid-column: 6; }
+  [app-match-team] .grid > div:nth-of-type(3) { grid-column: 7; }
+}
+
+
+/* ---- player table ---- */
+
+[app-match-players] > [appMatchPlayerGrid] {
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+}
+@container players (min-width: 32rem) {
+  [app-match-players] > [appMatchPlayerGrid] > span:nth-child(n+3)::after {
+    content: "account / ship";
+    display: block;
+    font-size: .72em;
+    font-weight: 400;
+    opacity: .6;
+  }
+}
+
+[app-match-players] > div.flex-col { gap: 2px !important; }
+[app-match-players] [appMatchPlayerGrid] { padding-right: 34px !important; } /* copy btn */
+[app-match-player] > [appMatchPlayerGrid] {
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}
+
+/* data-background is the PR color. needs chrome 133+ for attr() */
+[app-match-player] > [appMatchPlayerGrid][data-background] {
+  background: oklch(from attr(data-background type(<color>), transparent) l calc(c * .8) h / var(--row-tint)) !important;
+}
+[app-match-player] > [appMatchPlayerGrid][data-background]:hover {
+  background: oklch(from attr(data-background type(<color>), transparent) l calc(c * .8) h / var(--row-hover)) !important;
+}
+[app-match-player] > [appMatchPlayerGrid]:not([data-background]):hover {
+  background: rgb(255 255 255 / .06) !important;
+}
+
+[app-match-player] strong {
+  font-weight: 500;
+  opacity: .8;
+}
+
+[app-match-player-value] {
+  text-shadow: none !important;
+  font-weight: 500 !important;
+  font-size: 1em !important;
+}
+[app-match-player-value][data-color] { filter: saturate(.8) brightness(1.15); }
+
+/* top value = account, dim it */
+[appMatchPlayerGrid] .tabular-nums > [app-match-player-value]:first-child:not(:only-child) {
+  opacity: var(--dim);
+}
+/* PR col */
+[app-match-player] > [appMatchPlayerGrid] > div:nth-child(3) [app-match-player-value] {
+  font-weight: 650 !important;
+}
+/* battles col, colors are pointless here */
+[app-match-player] > [appMatchPlayerGrid] > div:nth-child(5) [app-match-player-value] {
+  color: #c9d1d9 !important;
+  filter: none;
+}
+
+
+.copy-btn {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  translate: 0 -50%;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  color: var(--color-text-secondary);
+  opacity: 0;
+  transition: opacity .12s;
+  z-index: 2;
+}
+[app-match-player]:hover .copy-btn { opacity: .8; }
+.copy-btn:hover {
+  opacity: 1 !important;
+  background: rgb(255 255 255 / .1);
+  color: var(--color-text);
+}
+.copy-btn.copied {
+  opacity: 1 !important;
+  color: #4ce8aa;
+}

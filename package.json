@@ -1,0 +1,38 @@
+{
+  "name": "wows-monitor-desktop",
+  "productName": "WoWs Monitor Desktop",
+  "version": "0.1.0",
+  "description": "Desktop wrapper for wows-monitor.com",
+  "main": "src/main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win portable nsis"
+  },
+  "devDependencies": {
+    "electron": "^45.3.3",
+    "electron-builder": "^26.0.0"
+  },
+  "build": {
+    "appId": "local.wowsmonitor.desktop",
+    "productName": "WoWs Monitor Desktop",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "inject/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false
+    }
+  }
+}
